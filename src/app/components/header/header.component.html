@@ -1,0 +1,26 @@
+ <mat-toolbar color="primary">
+     <span>KiT</span>
+     <nav class="ml-auto main-nav">
+         <a routerLink="/home" routerLinkActive="link-active" mat-button class="nav-link-home" *ngIf="isLoggedIn">Home</a>
+         <a routerLink="/login" routerLinkActive="link-active" mat-button class="nav-link-home" *ngIf="!isLoggedIn">Login</a>
+         <a routerLink="/" routerLinkActive="link-active" [routerLinkActiveOptions]="{exact: true}" mat-button class=" nav-link-home" *ngIf="!isLoggedIn">Sign Up</a>
+         <button mat-button [matMenuTriggerFor]="groupsMenu" *ngIf="isLoggedIn" class="btn-menu">Groups</button>
+         <mat-menu #groupsMenu="matMenu" xPosition="before">
+             <a
+                 mat-menu-item class="nav-links"
+                 routerLink="/groups/user-groups"
+                 [queryParams]="{category: 'created'}"
+                 routerLinkActive="link-active"
+                 [routerLinkActiveOptions]="{exact: true}">Groups Created
+             </a>
+             <a
+                 mat-menu-item class="nav-links"
+                 routerLink="/groups/user-groups"
+                 [queryParams]="{category: 'joined'}"
+                 routerLinkActive="link-active"
+                 [routerLinkActiveOptions]="{exact: true}">Joined Groups
+             </a>
+         </mat-menu>
+         <button mat-button *ngIf="isLoggedIn" (click)="onLogout()">Logout</button>
+     </nav>
+ </mat-toolbar>

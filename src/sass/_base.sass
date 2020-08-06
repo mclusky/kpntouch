@@ -1,0 +1,28 @@
+@import variables.sass
+@import mixins.sass
+
+html
+    overflow-y: scroll
+    font-size: 16px !important
+
+    @media screen and (max-width: 560px)
+        font-size: 14px !important
+
+html, body
+    font-family: 'Mukta', sans-serif !important
+    line-height: 1.6rem !important
+    color: $main-font !important
+
+h1, h2, h3, h4
+    font-family: 'Comfortaa', cursive
+    color: $headings
+
+    @media screen and (max-width: 560px)
+        text-align: center
+
+.create-link:hover
+    text-decoration: none !important
+    background: darken($button, 3%) !important
+
+.delete-link:hover
+    background: darken($danger, 5%) !important

@@ -1,0 +1,49 @@
+<div class="container mt-5">
+    <h1 class="text-center my-3">{{topic}} Groups</h1>
+    <div class="row justify-content-center">
+        <div class="col-12 text-center">
+            <mat-spinner class="mx-auto" *ngIf="isLoading$ | async"></mat-spinner>
+        </div>
+        <div class="col-12 col-lg-8 mt-3">
+            <mat-accordion multi="true">
+                <mat-expansion-panel *ngFor="let group of groups$ | async" [ngClass]="{'group-joined': group.admin === username}">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{group.name}} <span *ngIf="group.admin === username" class="group-admin">(Admin)</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        {{group.description}}
+                    </ng-template>
+                    <mat-action-row>
+                        <a *ngIf="group.admin === username" [routerLink]="['/groups/create/', group._id]" mat-button color="foreground"><i class="fal fa-edit"></i>
+                        </a>
+                        <button *ngIf="group.admin === username" mat-button color="warn" (click)="onDelete(group._id)"><i class="fal fa-trash-alt"></i>
+                        </button>
+                        <button *ngIf="(group.admin !== username) && !group.isMember; else view"
+                            mat-raised-button color="accent"
+                            class="create-link"
+                            (click)="onJoin(group._id)">
+                            Join
+                        </button>
+                        <ng-template #view>
+                            <a
+                                [routerLink]="['/groups', group._id]"
+                                mat-button color="foreground">
+                                <i class="fal fa-chevron-circle-right"></i>
+                            </a>
+                        </ng-template>
+                    </mat-action-row>
+                </mat-expansion-panel>
+            </mat-accordion>
+            <mat-paginator
+                #paginator
+                [length]="(totalGroups$ | async)"
+                [pageSize]="groupsPerPage"
+                [pageSizeOptions]="[5, 10, 25]"
+                (page)="onPageChange($event)"
+                class="mt-3">
+            </mat-paginator>
+        </div>
+    </div>
+</div>

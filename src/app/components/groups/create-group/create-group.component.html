@@ -1,0 +1,76 @@
+<div class="row mt-5">
+    <div class="col-6 mx-auto">
+        <mat-spinner *ngIf="isLoading$ | async" class="mx-auto"></mat-spinner>
+    </div>
+</div>
+<div class=" container mt-5" *ngIf="!(isLoading$ | async)">
+    <div class="row" *ngIf="!isEditMode">
+        <div class="col-12">
+            <h2 class="create-group">Create a Group</h2>
+            <p class="no-group" *ngIf="noGroup">It looks like there isn't any {{desiredTopic}} group yet.</p>
+            <p class="no-group" *ngIf="noGroup">Why not create one?</p>
+        </div>
+    </div>
+    <div class="row" *ngIf="isEditMode">
+        <div class="col-12">
+            <h2>Update your group settings</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <form [formGroup]="form" (ngSubmit)="onCreateGroup()">
+                <mat-form-field *ngIf="!isEditMode">
+                    <mat-label>Select Topic</mat-label>
+                    <mat-select formControlName="topic" required>
+                        <mat-option *ngFor="let top of topics$ | async" [value]="top">
+                            {{top.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('topic').hasError('required')">Please choose a topic</mat-error>
+                    <mat-hint *ngIf="form.value.topic">{{form.value.topic.info}}</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="mt-3">
+                    <input
+                        type="text"
+                        matInput
+                        formControlName="title"
+                        placeholder="Group Title"
+                        required>
+                    <mat-error *ngIf="form.get('title').invalid">Please enter a valid title</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <textarea
+                        matInput
+                        rows="6"
+                        formControlName="content"
+                        maxLength="200"
+                        placeholder="About this group (200 chars max)"></textarea>
+                    <mat-error *ngIf="form.get('content').invalid">Please enter a valid description</mat-error>
+                    <mat-error *ngIf="form.get('content').errors?.maxLength">200 characters maximum</mat-error>
+                </mat-form-field>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label>Allow colorful language in group?</label>
+                    </div>
+                </div>
+                <div class="col-md-6 pl-0">
+                    <mat-radio-group formControlName="language" aria-label="Allow colorful language?">
+                        <mat-radio-button
+                            value="true"
+                            color="primary"
+                            [checked]="swearing ? true : false">Yes</mat-radio-button>
+                        <mat-radio-button
+                            value="false"
+                            color="primary"
+                            [checked]="swearing ? false : true">No</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <button
+                    [disabled]="form.invalid"
+                    mat-raised-button
+                    color="accent"
+                    class="mt-3">{{isEditMode ? 'Update' : 'Create'}} </button>
+            </form>
+        </div>
+    </div>
+</div>

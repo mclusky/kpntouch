@@ -1,0 +1,37 @@
+<div class="container mt-5">
+    <mat-spinner *ngIf="isLoading$ | async" class="mx-auto"></mat-spinner>
+    <h2 class="text-center">Welcome {{username$ | async}}</h2>
+    <div class="row">
+        <div class="col-12">
+            <h5 class="my-3">Select a topic to join a group or create one.</h5>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <mat-form-field>
+                    <mat-label>Select Topic</mat-label>
+                    <mat-select formControlName="topic" required>
+                        <mat-option *ngFor="let topic of topics$ | async" [value]="topic">
+                            {{topic.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('topic').hasError('required')">Please choose a topic</mat-error>
+                    <mat-hint>{{form.value.topic.info}}</mat-hint>
+                </mat-form-field>
+                <button
+                    mat-raised-button
+                    color="accent"
+                    class="mt-3"
+                    [disabled]="form.invalid">View Groups</button>
+            </form>
+        </div>
+        <div class="col-12 mt-3">
+            <p class="my-3">or</p>
+            <a
+                routerLink='/groups/create'
+                [queryParams]="{new: true}"
+                mat-raised-button
+                color="accent"
+                class="create-link">
+                Create a Group
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="container mt-5">
+    <div class="row mt-3">
+        <div class="col-12">
+            <h1 class="home-title text-center">Welcome to <span class="title-letter">K</span>eep <span class="title-letter">I</span>n <span class="title-letter">T</span>ouch</h1>
+            <p class="signup-intro">Please create an account to start using the application. Once you're done, you can browse the different topics available, create or join a group and start adding posts. Once you've joined a group, you can chat with other online members in the group. There are't any thumbs up or emojis here, if you have something to say...well just say it. </p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <mat-card>
+                <mat-spinner *ngIf="isLoading" class="mx-auto"></mat-spinner>
+                <form
+                    *ngIf="!isLoading"
+                    [formGroup]='signupForm'
+                    (ngSubmit)="onSignup()">
+                    <mat-form-field>
+                        <input
+                            type="email"
+                            matInput
+                            placeholder="Email"
+                            required
+                            formControlName="email"
+                            email>
+                        <mat-error *ngIf="signupForm.get('email').invalid">Please enter a valid email</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="my-3">
+                        <input
+                            type="text"
+                            matInput
+                            placeholder="Username (min 5 characters)"
+                            required
+                            formControlName="username"
+                            minlength="5">
+                        <mat-error *ngIf="usernameTaken">Username not available</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="my-3">
+                        <input
+                            type="password"
+                            required
+                            matInput
+                            placeholder="Password (min 8 characters with number, special character & capital letter)"
+                            formControlName="password"
+                            minlength="8">
+                        <mat-error *ngIf="signupForm.get('password').invalid">Please enter valid password</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input
+                            type="password"
+                            required
+                            matInput
+                            placeholder="Confirm Password"
+                            formControlName="confirmPassword"
+                            minlength="7">
+                        <mat-error *ngIf="signupForm.get('confirmPassword') !== signupForm.get('password')">Passwords must match</mat-error>
+                    </mat-form-field>
+                    <button
+                        class="mt-2"
+                        mat-raised-button
+                        color="accent"
+                        type="submit"
+                        *ngIf="!isLoading"
+                        [disabled]="signupForm.invalid">
+                        Sign Up
+                    </button>
+                </form>
+            </mat-card>
+        </div>
+    </div>
+</div>

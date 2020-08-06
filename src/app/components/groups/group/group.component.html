@@ -1,0 +1,61 @@
+    <div class="container mt-4" *ngIf="group$ | async as group">
+        <div class="row">
+            <div class="col-12 my-3">
+                <h2 class="single-group-heading text-center mt-4">Hi {{user}}!</h2>
+                <h4
+                    class="text-center mt-2"
+                    *ngIf="group.admin !== user">Welcome to the "{{group.name}}" group
+                </h4>
+                <h4
+                    class="text-center mt-3"
+                    *ngIf="group.admin === user">See what's happening in your group "{{group.name}}"
+                </h4>
+            </div>
+            <div class="col-12">
+                <a
+                    *ngIf="group.admin === user"
+                    [routerLink]="['/groups/create/', group._id]"
+                    mat-raised-button
+                    class="create-link mr-3"
+                    color="accent">
+                    Edit
+                </a>
+                <button
+                    mat-raised-button
+                    color="warn"
+                    class="delete-link"
+                    (click)="onLeave()">
+                    {{group.admin === user ? 'Delete' : 'Leave'}}
+                </button>
+            </div>
+            <div class="col-12 mt-3">
+                <h5>About this group :</h5>
+                <p class="group-desc">{{group.description}}</p>
+                <p *ngIf="group.members > 1">There are {{group.members}} members.</p>
+                <p *ngIf="group.members === 1">There is {{group.members}} member.</p>
+                <p *ngIf="group.members === 0 || !group.members">No one has joined your group yet....<i class="fal fa-frown fa-2x"></i></p>
+            </div>
+            <div class="col-12">
+                <p class="swearing">Please note that swearing is <span *ngIf="!group.swearingAllowed">not</span> allowed in this group.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <a
+                    *ngIf="group"
+                    routerLink="/posts/{{group._id}}/create"
+                    mat-raised-button
+                    color="accent"
+                    class="create-link">Add Post</a>
+            </div>
+            <div class="col-6">
+                <a
+                    *ngIf="group"
+                    routerLink="chat"
+                    mat-raised-button
+                    color="accent"
+                    class="create-link">Chat</a>
+            </div>
+        </div>
+        <app-post-list [groupId]='groupId'></app-post-list>
+    </div>

@@ -1,0 +1,35 @@
+<div class="container mt-5" *ngIf="group$ | async as group">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2 class="mx-auto">Welcome to the "{{group.name}}" chat room</h2>
+            <button class="d-block mx-auto" mat-raised-button color="warn" (click)="leaveRoom()">Leave Room</button>
+        </div>
+    </div>
+    <section class="messages mt-5">
+        <div class="mt-5 msg" #msgWrapper (scroll)="onScroll()">
+            <p class="userJoin">{{userJoin$ | async}}</p>
+            <p class="userLeft">{{userLeft$ | async}}</p>
+            <p class="userMsg" *ngFor="let msg of messages" #msg>
+                {{msg}}
+            </p>
+        </div>
+    </section>
+    <section class="form">
+        <form [formGroup]="msgForm" (ngSubmit)="onSendMsg()">
+            <mat-form-field class="mt-3">
+                <input
+                    type="text"
+                    matInput
+                    formControlName="msg"
+                    placeholder="Type Message here"
+                    required>
+                <mat-error *ngIf="msgForm.get('msg').invalid">Please enter a valid message</mat-error>
+            </mat-form-field>
+            <button
+                [disabled]="msgForm.invalid"
+                mat-raised-button
+                color="accent"
+                class="mt-3">Send</button>
+        </form>
+    </section>
+</div>
