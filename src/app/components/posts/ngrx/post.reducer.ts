@@ -23,11 +23,20 @@ export const postReducer = createReducer(
     on(PostActions.getGroupPostsSuccess, (state, action) => {
         return adapter.addMany(action.posts, { ...state });
     }),
-    on(PostActions.getSinglePostSucess, (state, action) => {
+    on(PostActions.getSinglePostSuccess, (state, action) => {
         return adapter.addOne(action.post, { ...state });
     }),
     on(PostActions.deletePostSuccess, (state, action) => {
         return adapter.removeOne(action.postId, { ...state });
+    }),
+    on(PostActions.updatePostSuccess, (state, action) => {
+        return adapter.updateOne({
+            id: action.post._id,
+            changes: {
+                ...action.post
+            }
+        }, { ...state }
+        );
     })
 );
 

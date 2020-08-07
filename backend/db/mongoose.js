@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 //   .then(() => console.log('Connected to MongoDB'))
 //   .catch(err => console.log(err));
 
-mongoose.connect("mongodb+srv://chris:kit_dev@kit-keuu4.mongodb.net/kit-dev", {
+mongoose.connect(process.env.DATABASE, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false

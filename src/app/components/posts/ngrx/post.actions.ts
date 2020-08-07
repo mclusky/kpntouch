@@ -42,7 +42,7 @@ export const getSinglePost = createAction(
     props<{ postId: string }>()
 );
 
-export const getSinglePostSucess = createAction(
+export const getSinglePostSuccess = createAction(
     GET_SINGLE_POST_SUCCESS,
     props<{ post: Post }>()
 );
@@ -67,7 +67,7 @@ export const createPostFailed = createAction(
 
 export const updatePost = createAction(
     UPDATE_POST,
-    props<{ post: Post }>()
+    props<{ post: FormData | Post, id: string }>()
 );
 
 export const updatePostSuccess = createAction(

@@ -2,10 +2,9 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 
-import { User } from 'src/app/models/user.model';
 import { AppState } from 'src/app/store/app.reducers';
 
 import * as PostActions from '../ngrx/post.actions';

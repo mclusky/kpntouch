@@ -40,7 +40,7 @@ export class PostCreateComponent implements OnInit {
 
     ngOnInit() {
         this.isLoading$ = this.store.pipe(select(isLoading));
-        this.author = this.authService.getUser().username;
+        this.author = this.authService.getUser().userId;
         // Init Form
         this.form = new FormGroup({
             'title': new FormControl(null, { validators: [Validators.required, Validators.minLength(3)] }),
@@ -77,6 +77,12 @@ export class PostCreateComponent implements OnInit {
     }
 
     onSavePost() {
+        /*
+        CHECK IF USER IS CREATING A NEW POST OR UPDATING ONE
+        IF UPDATING, CHECK IF THE IMAGE HAS BEEN UPDATED
+        IF SO, CREATE NEW FORM DATA
+        ELSE JUST SEND A POST OBJECT
+        */
         if (this.form.invalid) {
             return;
         }
@@ -92,26 +98,29 @@ export class PostCreateComponent implements OnInit {
             this.store.dispatch(PostActions.createPost({ post }));
 
         } else if (this.mode === 'edit') {
-            let postData: Post | FormData;
             if (typeof this.form.value.image === 'object') {
-                postData = new FormData();
-                postData.append('_id', this.postId);
-                postData.append('title', this.form.value.title);
-                postData.append('content', this.form.value.content);
-                postData.append('group', this.groupId);
-                postData.append('image', this.form.value.image, this.form.value.title);
+
+                const post = new FormData();
+                post.append('_id', this.postId);
+                post.append('title', this.form.value.title);
+                post.append('content', this.form.value.content);
+                post.append('group', this.groupId);
+                post.append('author', this.author);
+                post.append('image', this.form.value.image, this.form.value.title);
+
+                this.store.dispatch(PostActions.updatePost({ post, id: this.postId }));
 
             } else {
-                postData = {
+                const post = {
                     _id: this.postId,
                     title: this.form.value.title,
                     content: this.form.value.content,
                     imagePath: this.form.value.image,
                     group: this.groupId,
-                    author: null
+                    author: this.author
                 };
+                this.store.dispatch(PostActions.updatePost({ post, id: this.postId }));
             }
-
         }
         this.form.reset();
         this.store.dispatch(SpinnerActions.startSpinner());

@@ -3,7 +3,6 @@ const Group = require('../models/group');
 const crypto = require('crypto');
 const { validationResult } = require('express-validator');
 const { sendEmail } = require('../emails/account');
-const { trim } = require('jquery');
 
 exports.createUser = async (req, res) => {
     const errors = validationResult(req);
@@ -20,7 +19,8 @@ exports.createUser = async (req, res) => {
         });
     } catch (err) {
         res.status(500).send({
-            message: "Invalid credentials"
+            message: "Invalid credentials",
+            err
         });
     }
 };

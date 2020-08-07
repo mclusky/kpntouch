@@ -9,7 +9,7 @@ const path = require('path');
 
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "/images")));
-app.use("/", express.static(path.join(__dirname, "kit")));
+// app.use("/", express.static(path.join(__dirname, "kit")));
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', "*");
     res.setHeader('Access-Control-Allow-Headers', "Origin, X-Request-With, Content-Type, Accept, Authorization");
@@ -21,8 +21,8 @@ app.use('/api/posts', postsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/groups', groupsRoutes);
 app.use('/api/topics', topicsRoutes);
-app.use((req, res, next) => {
-    res.sendFile(path.join(__dirname, 'kit', 'index.html'));
-});
+// app.use((req, res, next) => {
+//     res.sendFile(path.join(__dirname, 'kit', 'index.html'));
+// });
 
 module.exports = app;

@@ -17,7 +17,6 @@ exports.createPost = async (req, res) => {
             post
         });
     } catch (err) {
-        console.log(err);
         res.status(400).send({ message: 'Failed to create post' });
     }
 };
@@ -57,24 +56,24 @@ exports.updatePost = async (req, res) => {
         let imagePath;
         if (req.file) {
             const url = req.protocol + '://' + req.get("host");
-            imagePath = `${url}/images/${req.file.filename}`;
+            imagePath = `${url}/images/${req.body.image}`;
         } else {
-            imagePath = req.body.imagePath;
+            imagePath = req.body.image;
         }
         const updatedPost = {
             title: req.body.title,
             content: req.body.content,
             imagePath,
-            author: req.userId
+            author: req.body.author
         };
         const post = await Post.findByIdAndUpdate({
             _id: req.params.id,
-            author: req.userId
-        }, updatedPost);
+            author: req.body.author
+        }, updatedPost, { new: true });
         if (!post) {
             return res.status(401).send({ message: 'Not authorized' });
         }
-        res.send(post);
+        res.status(200).send(post);
     } catch (err) {
         res.status(500).send({ message: 'Failed to update post' });
     }

@@ -106,13 +106,44 @@ export class PostEffects {
     getSinglePostSuccess$ = createEffect(() =>
         this.actions$
             .pipe(
-                ofType(PostActions.getSinglePostSucess),
+                ofType(PostActions.getSinglePostSuccess),
                 map(action => {
                     return {
                         type: SpinnerActions.STOP_SPINNER
                     };
                 })
             )
+    );
+
+    updatePost$ = createEffect(() =>
+        this.actions$
+            .pipe(
+                ofType(PostActions.updatePost),
+                switchMap(action => {
+                    return this.http
+                        .patch<{ post: Post }>(`${BACKEND_URL}/posts/${action.id}`, action.post)
+                        .pipe(
+                            map(response => {
+                                return {
+                                    type: PostActions.UPDATE_POST_SUCCESS,
+                                    post: response
+                                };
+                            }),
+                            catchError(err => this.handleError(err, PostActions.UPDATE_POST_FAILED))
+                        );
+                })
+            )
+    );
+
+    updatePostSuccess$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(PostActions.updatePostSuccess),
+            map(action => {
+                return {
+                    type: SpinnerActions.STOP_SPINNER
+                };
+            })
+        )
     );
 
     deletePost$ = createEffect(() =>
@@ -144,10 +175,9 @@ export class PostEffects {
                     };
                 })
             )
-    )
+    );
 
     private handleError = (errorRes: any, action) => {
-        console.log(errorRes);
         this.store.dispatch(SpinnerActions.stopSpinner());
         if (!errorRes.error || !errorRes.error.error) {
             this.router.navigate(['/home']);
